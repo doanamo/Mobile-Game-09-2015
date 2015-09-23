@@ -26,7 +26,7 @@ public class Game extends ApplicationAdapter
         batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
 
-        texture = new Texture("badlogic.jpg");
+        texture = new Texture(Gdx.files.internal("target.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
@@ -44,7 +44,7 @@ public class Game extends ApplicationAdapter
             y = touchPosition.y;
         }
 
-        Gdx.gl.glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        Gdx.gl.glClearColor(0.44f, 0.69f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
