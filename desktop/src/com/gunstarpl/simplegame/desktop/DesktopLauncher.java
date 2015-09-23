@@ -2,11 +2,11 @@ package com.gunstarpl.simplegame.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.gunstarpl.simplegame.Game;
+import com.gunstarpl.simplegame.Application;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Game(), config);
+		new LwjglApplication(new Application(), config);
 	}
 }
