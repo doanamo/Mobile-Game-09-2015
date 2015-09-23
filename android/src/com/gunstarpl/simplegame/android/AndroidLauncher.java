@@ -6,11 +6,17 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.gunstarpl.simplegame.Game;
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends AndroidApplication
+{
 	@Override
-	protected void onCreate (Bundle savedInstanceState) {
+	protected void onCreate (Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+
 		initialize(new Game(), config);
 	}
 }
