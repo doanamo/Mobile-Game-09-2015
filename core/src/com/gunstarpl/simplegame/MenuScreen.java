@@ -35,8 +35,9 @@ public class MenuScreen implements Screen
 
         context.batch.setProjectionMatrix(camera.combined);
         context.batch.begin();
-            context.font.draw(context.batch, "Welcome to the game!", 100, 300);
-            context.font.draw(context.batch, "Tap anywhere to begin...", 100, 200);
+            context.font.getData().setScale(4.0f);
+            context.font.draw(context.batch, "Welcome to the game!", 50, 800);
+            context.font.draw(context.batch, "Tap anywhere to begin...", 50, 700);
         context.batch.end();
 
         if(Gdx.input.isTouched())
