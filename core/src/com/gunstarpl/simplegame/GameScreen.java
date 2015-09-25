@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen
 {
-    private SpriteBatch batch;
+    private Application context;
 
     private OrthographicCamera camera;
     private Texture texture;
@@ -23,7 +23,7 @@ public class GameScreen implements Screen
 
     public GameScreen(final Application context)
     {
-        batch = context.batch;
+        this.context = context;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -82,16 +82,14 @@ public class GameScreen implements Screen
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
-
-        for(Circle target : targets)
-        {
-            batch.draw(texture, -texture.getWidth() * 0.5f + target.x, -texture.getHeight() * 0.5f + target.y);
-        }
-
-        batch.end();
+        context.batch.setProjectionMatrix(camera.combined);
+        context.batch.begin();
+            for(Circle target : targets)
+            {
+                context.batch.draw(texture, -texture.getWidth() * 0.5f + target.x, -texture.getHeight() * 0.5f + target.y);
+            }
+        context.batch.end();
     }
 
     @Override
