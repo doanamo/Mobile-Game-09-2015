@@ -1,8 +1,11 @@
 package com.gunstarpl.simplegame;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class Application extends Game
 {
@@ -14,6 +17,14 @@ public class Application extends Game
     {
         batch = new SpriteBatch();
         font = new BitmapFont();
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 48;
+        parameter.borderWidth = 2.0f;
+
+        font = generator.generateFont(parameter);
+        generator.dispose();
 
         this.setScreen(new MenuScreen(this));
     }
