@@ -5,17 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen
 {
     private Application context;
 
     private OrthographicCamera camera;
+    private Viewport viewport;
+
     private Texture texture;
 
     private Array<Circle> targets;
@@ -26,7 +29,11 @@ public class GameScreen implements Screen
         this.context = context;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.setToOrtho(false);
+        camera.update();
+
+        viewport = new FitViewport(720, 1280, camera);
+        viewport.apply(true);
 
         texture = new Texture(Gdx.files.internal("target.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -64,7 +71,7 @@ public class GameScreen implements Screen
             Vector3 touchPosition = new Vector3();
             touchPosition.x = Gdx.input.getX();
             touchPosition.y = Gdx.input.getY();
-            camera.unproject(touchPosition);
+            viewport.unproject(touchPosition);
 
             for(int i = targets.size - 1; i >= 0; --i)
             {
@@ -81,9 +88,9 @@ public class GameScreen implements Screen
         Gdx.gl.glClearColor(0.44f, 0.69f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
+        context.batch.setProjectionMatrix(camera.projection);
+        context.batch.setTransformMatrix(camera.view);
 
-        context.batch.setProjectionMatrix(camera.combined);
         context.batch.begin();
             for(Circle target : targets)
             {
@@ -95,6 +102,7 @@ public class GameScreen implements Screen
     @Override
     public void resize(int width, int height)
     {
+        viewport.update(width, height);
     }
 
     @Override
