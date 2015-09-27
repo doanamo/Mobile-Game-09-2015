@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MenuScreen implements Screen
@@ -33,6 +35,8 @@ public class MenuScreen implements Screen
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = context.font;
+        textButtonStyle.fontColor = Color.WHITE;
+        textButtonStyle.overFontColor = new Color(1.0f, 0.31f, 0.0f, 1.0f);
         skin.add("default", textButtonStyle);
 
         // Create a stage.
@@ -43,9 +47,19 @@ public class MenuScreen implements Screen
         table = new Table();
         table.setDebug(false);
         table.setFillParent(true);
+        table.setY(40.0f);
         stage.addActor(table);
 
-        // Create a new game button.
+        // Add a logo image.
+        Texture texture = new Texture(Gdx.files.internal("target.png"));
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Image imageLogo = new Image(texture);
+        imageLogo.setOrigin(texture.getWidth() / 2, 0);
+        imageLogo.setScale(2.0f, 2.0f);
+        table.add(imageLogo).pad(100.0f).row();
+
+        // Add a new game button.
         TextButton buttonNewGame = new TextButton("New Game", skin);
 
         buttonNewGame.addListener(new ChangeListener()
@@ -59,7 +73,7 @@ public class MenuScreen implements Screen
 
         table.add(buttonNewGame).pad(20.0f).row();
 
-        // Create a quit button.
+        // Add a quit button.
         TextButton buttonQuit = new TextButton("Quit", skin);
 
         buttonQuit.addListener(new ChangeListener()
@@ -86,7 +100,7 @@ public class MenuScreen implements Screen
         Gdx.gl.glClearColor(0.44f, 0.69f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(Gdx.graphics.getDeltaTime());
+        stage.act(dt);
         stage.draw();
     }
 
