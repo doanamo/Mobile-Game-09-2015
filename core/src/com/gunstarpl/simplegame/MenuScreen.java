@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MenuScreen implements Screen
@@ -24,6 +22,8 @@ public class MenuScreen implements Screen
     private Skin skin;
     private Stage stage;
     private Table table;
+
+    TextButton buttonContinue;
 
     public MenuScreen(final Application context)
     {
@@ -37,11 +37,11 @@ public class MenuScreen implements Screen
         textButtonStyle.font = context.font;
         textButtonStyle.fontColor = Color.WHITE;
         textButtonStyle.overFontColor = new Color(1.0f, 0.31f, 0.0f, 1.0f);
+        textButtonStyle.disabledFontColor = new Color(0.8f, 0.8f, 0.8f, 1.0f);
         skin.add("default", textButtonStyle);
 
         // Create a stage.
         stage = new Stage(new FitViewport(720, 1280));
-        Gdx.input.setInputProcessor(stage);
 
         // Create a table.
         table = new Table();
@@ -59,6 +59,21 @@ public class MenuScreen implements Screen
         imageLogo.setScale(2.0f, 2.0f);
         table.add(imageLogo).pad(100.0f).row();
 
+        // Add a continue button.
+        buttonContinue = new TextButton("Continue", skin);
+        buttonContinue.setDisabled(true);
+
+        buttonContinue.addListener(new ChangeListener()
+        {
+            public void changed(ChangeEvent event, Actor actor)
+            {
+                assert(context.gameScreen != null);
+                context.setScreen(context.gameScreen);
+            }
+        });
+
+        table.add(buttonContinue).pad(20.0f).row();
+
         // Add a new game button.
         TextButton buttonNewGame = new TextButton("New Game", skin);
 
@@ -66,8 +81,14 @@ public class MenuScreen implements Screen
         {
             public void changed(ChangeEvent event, Actor actor)
             {
-                context.setScreen(new GameScreen(context));
-                self.dispose();
+                if(context.gameScreen != null)
+                {
+                    context.gameScreen.dispose();
+                    context.gameScreen = null;
+                }
+
+                context.gameScreen = new GameScreen(context);
+                context.setScreen(context.gameScreen);
             }
         });
 
@@ -95,6 +116,14 @@ public class MenuScreen implements Screen
     }
 
     @Override
+    public void show()
+    {
+        Gdx.input.setInputProcessor(stage);
+
+        buttonContinue.setDisabled(context.gameScreen == null);
+    }
+
+    @Override
     public void render(float dt)
     {
         Gdx.gl.glClearColor(0.44f, 0.69f, 1.0f, 1.0f);
@@ -111,13 +140,9 @@ public class MenuScreen implements Screen
     }
 
     @Override
-    public void show()
-    {
-    }
-
-    @Override
     public void hide()
     {
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.gunstarpl.simplegame;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -30,10 +31,8 @@ public class GameScreen implements Screen
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false);
-        camera.update();
 
         viewport = new FitViewport(720, 1280, camera);
-        viewport.apply(true);
 
         texture = new Texture(Gdx.files.internal("target.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -45,6 +44,15 @@ public class GameScreen implements Screen
     public void dispose()
     {
         texture.dispose();
+    }
+
+    @Override
+    public void show()
+    {
+        camera.update();
+        viewport.apply(true);
+
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -85,6 +93,12 @@ public class GameScreen implements Screen
             }
         }
 
+        if(Gdx.input.isKeyJustPressed(Keys.BACK) || Gdx.input.isKeyJustPressed(Keys.ESCAPE))
+        {
+            context.setScreen(context.menuScreen);
+            return;
+        }
+
         Gdx.gl.glClearColor(0.44f, 0.69f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -103,11 +117,6 @@ public class GameScreen implements Screen
     public void resize(int width, int height)
     {
         viewport.update(width, height);
-    }
-
-    @Override
-    public void show()
-    {
     }
 
     @Override

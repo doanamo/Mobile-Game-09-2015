@@ -13,6 +13,9 @@ public class Application extends Game
     public SpriteBatch batch;
     public BitmapFont font;
 
+    public MenuScreen menuScreen;
+    public GameScreen gameScreen;
+
     @Override
     public void create()
     {
@@ -28,7 +31,10 @@ public class Application extends Game
         font = generator.generateFont(parameter);
         generator.dispose();
 
-        this.setScreen(new MenuScreen(this));
+        menuScreen = new MenuScreen(this);
+        gameScreen = null;
+
+        this.setScreen(menuScreen);
     }
 
     @Override
@@ -36,6 +42,11 @@ public class Application extends Game
     {
         batch.dispose();
         font.dispose();
+
+        menuScreen.dispose();
+
+        if(gameScreen != null)
+            gameScreen.dispose();
     }
 
     @Override
